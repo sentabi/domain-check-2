@@ -5,10 +5,13 @@
 #
 # Author: Matty < matty91 at gmail dot com >
 #
-# Current Version: 2.41
-# Last Updated: 16-June-2019
+# Current Version: 2.42
+# Last Updated: 19-June-2019
 #
 # Revision History:
+#
+#  Version 2.42
+#   Added support for .com domain Alibaba Cloud Computing (Beijing) Co., Ltd. registrar -- https://github.com/sentabi
 #
 #  Version 2.41
 #   Added support for .stream domain -- https://github.com/hawkeye116477
@@ -660,6 +663,10 @@ check_domain_status()
         "${TLDTYPE}" == "stream" ]; # added on 26-aug-2017 by nixCraft
     then
         tdomdate=`${AWK} '/Registry Expiry Date:/ { print $NF }' ${WHOIS_TMP}`
+        if [ -z $tdomdate ]
+        then
+          tdomdate=`${AWK} '/Registrar Registration Expiration Date:/ { print $NF }' ${WHOIS_TMP}`
+        fi
         tyear=`echo ${tdomdate} | ${CUT} -d'-' -f1`
         tmon=`echo ${tdomdate} |${CUT} -d'-' -f2`
         tmonth=$(getmonth_number ${tmon})
